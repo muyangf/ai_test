@@ -1,0 +1,18 @@
+[project]
+name = "ai-test"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "langchain-community>=0.4.1",
+    "langchain-mcp-adapters>=0.2.1",
+    "langchain-openai>=1.1.10",
+    "langgraph>=1.0.10",
+    "langgraph-cli[inmem]>=0.4.14",
+    "langsmith>=0.7.9",
+    "mcp>=1.26.0",
+    "nebula3-python>=3.8.3",
+    "openai>=2.24.0",
+    "pydantic>=2.12.5",
+]

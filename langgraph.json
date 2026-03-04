@@ -1,0 +1,21 @@
+{
+  "graphs": {
+    "military_agent": "./graph.py:app"
+  },
+  "env": ".env",
+  "dependencies": [
+    "."
+  ],
+  "pip_config": {
+    "installer": "uv"
+  },
+  "mcp_servers": {
+    "military_skill_set": {
+      "command": "uv",
+      "args": [
+        "run",
+        "mcp_military_server.py"
+      ]
+    }
+  }
+}

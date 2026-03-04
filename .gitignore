@@ -1,0 +1,13 @@
+# 忽略 Python 缓存和虚拟环境
+__pycache__/
+.venv/
+venv/
+*.pyc
+
+# 忽略环境变量和本地机密配置
+.env
+.env.local
+
+# 忽略本地生成的测试文件或图谱记忆数据库
+*.txt
+*.sqlite
