@@ -1,27 +1,22 @@
-# mcp_military_server.py
 from mcp.server.fastmcp import FastMCP
-import os
+from nebula_tool import NebulaGraphTool  # 引入我们写好的探针
 
 # 1. 初始化 MCP 服务
-mcp = FastMCP("Military_Data_Center")
+mcp = FastMCP("Military_Graph_Center")
 
-# 定义一个存放军事说明书的路径
-DOCS_PATH = "./military_docs"
-os.makedirs(DOCS_PATH, exist_ok=True)
+# 2. 实例化 Nebula 探针 (连接到 V6 满编宇宙)
+graph_tool = NebulaGraphTool(space_name="military_space_v6")
 
-# 2. 注册一个“搜索文件”的工具
+# 3. 注册“图谱查询”超级工具
 @mcp.tool()
-def list_weapon_files() -> list[str]:
-    """列出当前数据库中所有的武器说明书文件名称。"""
-    return os.listdir(DOCS_PATH)
-
-# 3. 注册一个“读取参数”的工具
-@mcp.tool()
-def read_weapon_spec(file_name: str) -> str:
-    """读取特定武器说明书的详细文本内容。"""
-    safe_path = os.path.join(DOCS_PATH, os.path.basename(file_name))
-    with open(safe_path, "r", encoding="utf-8") as f:
-        return f.read()
+def execute_ngql(query: str) -> str:
+    """
+    执行 nGQL 语句查询军工图谱数据库。
+    你必须传入标准的 nGQL MATCH 语句。
+    例如: MATCH (a:Aircraft) WHERE a.Aircraft.Name == "F-22A Raptor" RETURN a;
+    """
+    print(f"📡 [MCP探针] 正在执行 nGQL: {query}")
+    return graph_tool.execute_query(query)
 
 if __name__ == "__main__":
     mcp.run()

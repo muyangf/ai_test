@@ -70,50 +70,71 @@ mcp_client = MultiServerMCPClient(
 )
 
 
-# --- 1. 先定义工具 (必须放在前面) ---
-@tool
-def query_weapon_database(weapon_name: str):
-    """
-    查询军事装备数据库，获取特定武器的详细技术参数。
-    当用户询问武器的航程、发动机、生产商等具体数据时，请使用此工具。
-    """
-    # 这里我们先用模拟数据，下一阶段会替换为真正的 NebulaGraph 查询语句
-    mock_db = {
-        "歼-20": {
-            "engine": "WS-15",
-            "max_range": "5500km",
-            "manufacturer": "成都飞机制造成员",
-        },
-        "F-22": {
-            "engine": "F119-PW-100",
-            "max_range": "2960km",
-            "manufacturer": "洛克希德·马丁",
-        },
-    }
+async def action(state):
+    """工具执行节点"""
+    mcp_tools = await mcp_client.get_tools()
+    all_tools = mcp_tools  # 👈 只使用 MCP 提供的真实探针
 
-    # 模拟查询逻辑
-    result = mock_db.get(weapon_name, "数据库中暂无该武器的详细记录。")
-    return f"查询结果：{result}"
+    tool_executor = ToolNode(all_tools)
+    return await tool_executor.ainvoke(state)
 
 
 from langgraph.prebuilt import ToolNode
 
 
-async def action(state):
-    """工具执行节点"""
-    # 同样需要获取包含 MCP 在内的所有工具
-    mcp_tools = await mcp_client.get_tools()
-    all_tools = [query_weapon_database] + mcp_tools
-
-    # all_tools = [query_weapon_database]
-
-    # 动态构建执行器并异步执行
-    tool_executor = ToolNode(all_tools)
-    return await tool_executor.ainvoke(state)
-
-
-# 2. 注意前面加了 async 关键字
 async def weapon_expert_node(state):
+    """提取军事信息的专家节点 (搭载图谱法则)"""
+    print(f"🤖 军工图谱专家正在推演 (重试次数: {state.get('retry_count', 0)})")
+
+    mcp_tools = await mcp_client.get_tools()
+    all_tools = mcp_tools
+
+    bound_model = ChatOpenAI(
+        model=Config.MODEL_NAME,
+        api_key=Config.API_KEY,
+        base_url=Config.BASE_URL,
+        temperature=0.1, # 降低温度以保证 nGQL 语法严谨
+    ).bind_tools(all_tools)
+
+    instructions = parser.get_format_instructions()
+
+    system_prompt = f"""你是一个顶级的军事装备情报官和图数据库专家。
+你现在连接着一个极度详尽的 NebulaGraph 军工图谱数据库。
+
+【军工图谱物理法则 (Schema)】
+1. 核心实体节点 (TAG):
+   - Aircraft (飞机): Name, WeightMax, Length...
+   - Weapon (武器): Name, Type, AirRangeMax...
+   - Sensor (雷达/传感器): Name, RangeMax...
+   - Loadout (战术挂载方案): Name...
+   - Magazine (弹药库): Name, Capacity...
+
+2. 核心战术连线 (EDGE):
+   - aircraft_has_sensor: Aircraft -> Sensor (战机自带雷达)
+   - aircraft_can_equip: Aircraft -> Loadout (战机可用的挂载方案)
+   - loadout_contains: Loadout -> Weapon (挂载方案包含的武器，连线上有 DefaultLoad 和 MaxLoad 属性，代表携弹量！)
+   - magazine_contains_weapon: Magazine -> Weapon (弹药库里的武器，连线上有 Quantity 属性，代表备弹数！)
+
+【你的核心任务】
+第一阶段 - 情报侦察：只要用户询问武器参数、飞机雷达、战机携弹量等，你必须调用 `execute_ngql` 工具，编写 nGQL (MATCH) 语句去查询数据库。不需要输出 JSON，直接调用工具！
+
+💡 nGQL 编写指南 (极度重要)：
+- 查飞机：`MATCH (a:Aircraft) WHERE a.Aircraft.Name CONTAINS "F-22" RETURN a.Aircraft.Name LIMIT 5;`
+- 查飞机的挂载武器和携弹量 (联表穿透)：`MATCH (a:Aircraft)-[:aircraft_can_equip]->(l:Loadout)-[e:loadout_contains]->(w:Weapon) WHERE a.Aircraft.Name CONTAINS "F-22" RETURN l.Loadout.Name, w.Weapon.Name, e.MaxLoad LIMIT 10;`
+
+第二阶段 - 结构化汇报：工具返回结果后，你必须从中提取真实数据，组装成 JSON 格式输出给用户。
+⚠️ 严厉警告：绝对不允许输出 JSON Schema 定义规则，直接输出真实的 JSON 实例！
+
+【最终输出格式要求】
+{instructions}"""
+
+    if state.get("error_log"):
+        system_prompt += f"\n\n⚠️ 纠错指令：上轮执行失败，原因是：{state['error_log']}。如果是 nGQL 语法错误，请检查你的 MATCH 语句并重试！"
+
+    messages = [SystemMessage(content=system_prompt)] + state["messages"]
+    response = await bound_model.ainvoke(messages)
+    
+    return {"messages": [response], "retry_count": state.get("retry_count", 0) + 1}
     """提取军事信息的专家节点 (已升级为 MCP 异步并发架构)"""
     print(f"🤖 专家正在处理 (重试次数: {state.get('retry_count', 0)})")
 
@@ -135,21 +156,41 @@ async def weapon_expert_node(state):
     # ================= 2. 保留并升级核心业务逻辑 =================
     instructions = parser.get_format_instructions()
 
-    # 终极防呆版 SOP 提示词
-    system_prompt = f"""你是一个专业的军事装备数据提取专家。
+    # 🌟 终极图谱注入版 SOP 提示词 (Text2nGQL)
+    system_prompt = f"""你是一个顶级的军事装备情报官和图数据库专家。
+你现在连接着一个极度详尽的 NebulaGraph 军工图谱数据库。
 
-【标准工作流】
-第一阶段 - 情报侦察：如果需要查询特定武器参数，请优先调用工具 (如 read_weapon_spec 等) 获取机密资料。在调用工具时，请直接触发工具，不需要输出 JSON。
+【图谱物理法则 (Schema)】
+1. 核心实体节点 (TAG):
+   - Aircraft (飞机): 属性有 Name, WeightMax, Length, Crew 等。
+   - Weapon (武器): 属性有 Name, Type, AirRangeMax, SurfaceRangeMax 等。
+   - Sensor (雷达/传感器): 属性有 Name, RangeMax 等。
+   - Loadout (战术挂载方案): 属性有 Name, DefaultCombatRadius 等。
+   - Magazine (弹药库): 属性有 Name, Capacity。
 
-第二阶段 - 结构化汇报：获取到资料后，你必须从中提取真实数据，并严格组装成最终的 JSON 格式输出。
-⚠️ 严厉警告：请直接输出包含真实提取数据的 JSON 实例（例如 {{"name": "歼-20", "engine": "涡扇-15", "max_range": "未知"}}），**绝对不允许**输出 JSON Schema 的定义规则！
+2. 核心关系连线 (EDGE):
+   - aircraft_has_sensor: Aircraft -> Sensor (飞机自带雷达)
+   - aircraft_can_equip: Aircraft -> Loadout (飞机可用的挂载方案)
+   - loadout_contains: Loadout -> Weapon (挂载方案包含的武器，连线上有 DefaultLoad 和 MaxLoad 属性代表携弹量！)
+   - magazine_contains_weapon: Magazine -> Weapon (弹药库里的武器，连线上有 Quantity 属性代表数量！)
+
+【你的核心任务】
+第一阶段 - 情报侦察：如果用户询问某款武器的参数、飞机的雷达、或者战机的携弹量，你必须调用 `execute_ngql` 工具，并编写 nGQL (MATCH) 语句去查询数据库。
+
+💡 nGQL 编写指南 (极度重要)：
+- 查询节点：`MATCH (a:Aircraft) WHERE a.Aircraft.Name CONTAINS "F-22" RETURN a.Aircraft.Name, a.Aircraft.WeightMax LIMIT 5;`
+- 查询飞机挂载的武器及数量 (联表穿透)：`MATCH (a:Aircraft)-[:aircraft_can_equip]->(l:Loadout)-[e:loadout_contains]->(w:Weapon) WHERE a.Aircraft.Name CONTAINS "F-22" RETURN l.Loadout.Name, w.Weapon.Name, e.MaxLoad LIMIT 10;`
+
+第二阶段 - 结构化汇报：获取到资料后，请将其提取并组装成 JSON 格式输出给用户。
+⚠️ 严厉警告：绝对不允许输出 JSON Schema 的定义规则，直接输出真实的 JSON 实例！
 
 【格式要求】
 {instructions}"""
 
     # 如果有上轮报错信息，将其加入提示词进行修正
     if state.get("error_log"):
-        system_prompt += f"\n\n⚠️ 纠错指令：上轮解析失败，原因是：{state['error_log']}。请务必核对键名和格式！"
+        system_prompt += f"\n\n⚠️ 纠错指令：上轮执行失败，原因是：{state['error_log']}。如果是 nGQL 语法错误，请检查你的 MATCH 语句并重试！"
+    # ... 后面的代码保持不变 ...
 
     messages = [SystemMessage(content=system_prompt)] + state["messages"]
 

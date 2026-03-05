@@ -1,10 +1,7 @@
 from pydantic import BaseModel, Field
+from typing import List, Dict, Any
 
-# 定义军事装备提取的标准化格式
 class WeaponInfo(BaseModel):
-    """军事武器装备的核心数据模型"""
-    name: str = Field(description="武器装备的正式名称，例如：歼-20")
-    engine: str = Field(description="配套的发动机型号，例如：WS-15")
-    max_range: str = Field(description="装备的最大射程或作战航程，需包含单位")
-
-# 这种拆分确保了如果你未来需要增加“雷达”或“载弹量”字段，只需在此处修改
+    """军事武器装备的动态战术数据模型"""
+    summary: str = Field(description="对用户提问的精简自然语言回答与战术总结")
+    tactical_data: List[Dict[str, Any]] = Field(description="从图数据库中提取出的具体结构化数据记录（如查到的武器列表、参数、最大携弹量等）")
