@@ -1,0 +1,1779 @@
+@startuml
+
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+class Capabilities {
+   Description: text
+   Supported: boolean
+   ID: integer
+}
+class DataAircraft {
+   Category: integer
+   Type: integer
+   Name: text
+   Comments: text
+   OperatorCountry: integer
+   OperatorService: integer
+   YearCommissioned: integer
+   YearDecommissioned: integer
+   Length: double
+   Span: double
+   Height: double
+   WeightEmpty: integer
+   WeightMax: integer
+   WeightPayload: integer
+   Crew: integer
+   Agility: double
+   ClimbRate: double
+   AutonomousControlLevel: integer
+   CockpitGen: integer
+   Ergonomics: integer
+   OODADetectionCycle: integer
+   OODATargetingCycle: integer
+   OODAEvasiveCycle: integer
+   TotalEndurance: integer
+   PhysicalSizeCode: integer
+   RunwayLengthCode: integer
+   Hypothetical: boolean
+   Cost: integer
+   DamagePoints: double
+   AircraftEngineArmor: integer
+   AircraftFuselageArmor: integer
+   AircraftCockpitArmor: integer
+   Visibility: text
+   FuelOffloadRate: integer
+   FuelOnloadRate: integer
+   Deprecated: boolean
+   ID: integer
+}
+class DataAircraftCodes {
+   ID: integer
+   CodeID: integer
+}
+class DataAircraftComms {
+   ComponentID: integer
+   ParentSpecific: boolean
+   IsRelay: boolean
+   ID: integer
+   ComponentNumber: integer
+}
+class DataAircraftFacility {
+   Type: integer
+   PhysicalSize: integer
+   Capacity: integer
+   RunwayLength: integer
+   ID: integer
+}
+class DataAircraftFuel {
+   ComponentID: integer
+   ID: integer
+   ComponentNumber: integer
+}
+class DataAircraftLoadouts {
+   ID: integer
+   ComponentID: integer
+}
+class DataAircraftMounts {
+   ComponentID: integer
+   SB1: boolean
+   SB2: boolean
+   SMF1: boolean
+   SMF2: boolean
+   SMA1: boolean
+   SMA2: boolean
+   SS1: boolean
+   SS2: boolean
+   PB1: boolean
+   PB2: boolean
+   PMF1: boolean
+   PMF2: boolean
+   PMA1: boolean
+   PMA2: boolean
+   PS1: boolean
+   PS2: boolean
+   ID: integer
+   ComponentNumber: integer
+}
+class DataAircraftPropulsion {
+   ComponentID: integer
+   ID: integer
+   ComponentNumber: integer
+}
+class DataAircraftSensors {
+   ComponentID: integer
+   DegOverride: integer
+   SB1: boolean
+   SB2: boolean
+   SMF1: boolean
+   SMF2: boolean
+   SMA1: boolean
+   SMA2: boolean
+   SS1: boolean
+   SS2: boolean
+   PB1: boolean
+   PB2: boolean
+   PMF1: boolean
+   PMF2: boolean
+   PMA1: boolean
+   PMA2: boolean
+   PS1: boolean
+   PS2: boolean
+   DegOverrideMax: integer
+   SB1Max: boolean
+   SB2Max: boolean
+   SMF1Max: boolean
+   SMF2Max: boolean
+   SMA1Max: boolean
+   SMA2Max: boolean
+   SS1Max: boolean
+   SS2Max: boolean
+   PB1Max: boolean
+   PB2Max: boolean
+   PMF1Max: boolean
+   PMF2Max: boolean
+   PMA1Max: boolean
+   PMA2Max: boolean
+   PS1Max: boolean
+   PS2Max: boolean
+   VerticalDegMax: integer
+   MastHeight: integer
+   ID: integer
+   ComponentNumber: integer
+}
+class DataAircraftSignatures {
+   Front: double
+   Side: double
+   Rear: double
+   Top: double
+   ID: integer
+   Type: integer
+}
+class DataComm {
+   Name: text
+   Comments: text
+   Type: integer
+   Range: integer
+   Channels: integer
+   IsOptional: boolean
+   WeaponLinkRequiresSensor: boolean
+   Hypothetical: boolean
+   Deprecated: boolean
+   QualityGrade: integer
+   RefreshRateGrade: integer
+   RefreshRate: integer
+   ID: integer
+}
+class DataCommCapabilities {
+   ID: integer
+   CodeID: integer
+}
+class DataCommDirectors {
+   ComponentID: integer
+   ID: integer
+   ComponentNumber: integer
+}
+class DataCommType {
+   Name: text
+   Comments: text
+   IsWireless: boolean
+   ID: integer
+}
+class DataCommTypeCanTalkTo {
+   ComponentID: integer
+   ID: integer
+   ComponentNumber: integer
+}
+class DataContainer {
+   Name: text
+   Comments: text
+   Type: integer
+   Length: double
+   Width: double
+   Height: double
+   IsHold: boolean
+   Container_ParadropCapable: boolean
+   Weight: integer
+   PayloadCapacity: integer
+   CubicCapacity: integer
+   ID: integer
+}
+class DataDockingFacility {
+   Type: integer
+   PhysicalSize: integer
+   Capacity: integer
+   ID: integer
+}
+class DataFacility {
+   Name: text
+   Comments: text
+   Category: integer
+   Type: integer
+   OperatorCountry: integer
+   OperatorService: integer
+   YearCommissioned: integer
+   YearDecommissioned: integer
+   Area: integer
+   Length: integer
+   Width: integer
+   Crew: integer
+   ArmorGeneral: integer
+   DamagePoints: integer
+   MastHeight: integer
+   MissileDefense: integer
+   CSGen: integer
+   Ergonomics: integer
+   OODADetectionCycle: integer
+   OODATargetingCycle: integer
+   OODAEvasiveCycle: integer
+   MountsAreAimpoints: boolean
+   Radius: integer
+   Hypothetical: boolean
+   Cost: integer
+   Deprecated: boolean
+   ID: integer
+}
+class DataFacilityAircraftFacilities {
+   ComponentID: integer
+   ID: integer
+   ComponentNumber: integer
+}
+class DataFacilityComms {
+   ComponentID: integer
+   ParentSpecific: boolean
+   IsRelay: boolean
+   ID: integer
+   ComponentNumber: integer
+}
+class DataFacilityDockingFacilities {
+   ComponentID: integer
+   ID: integer
+   ComponentNumber: integer
+}
+class DataFacilityFuel {
+   ComponentID: integer
+   ID: integer
+   ComponentNumber: integer
+}
+class DataFacilityMagazines {
+   ComponentID: integer
+   ID: integer
+   ComponentNumber: integer
+}
+class DataFacilityMounts {
+   ComponentID: integer
+   SB1: boolean
+   SB2: boolean
+   SMF1: boolean
+   SMF2: boolean
+   SMA1: boolean
+   SMA2: boolean
+   SS1: boolean
+   SS2: boolean
+   PB1: boolean
+   PB2: boolean
+   PMF1: boolean
+   PMF2: boolean
+   PMA1: boolean
+   PMA2: boolean
+   PS1: boolean
+   PS2: boolean
+   ID: integer
+   ComponentNumber: integer
+}
+class DataFacilitySensors {
+   ComponentID: integer
+   SB1: boolean
+   SB2: boolean
+   SMF1: boolean
+   SMF2: boolean
+   SMA1: boolean
+   SMA2: boolean
+   SS1: boolean
+   SS2: boolean
+   PB1: boolean
+   PB2: boolean
+   PMF1: boolean
+   PMF2: boolean
+   PMA1: boolean
+   PMA2: boolean
+   PS1: boolean
+   PS2: boolean
+   SB1Max: boolean
+   SB2Max: boolean
+   SMF1Max: boolean
+   SMF2Max: boolean
+   SMA1Max: boolean
+   SMA2Max: boolean
+   SS1Max: boolean
+   SS2Max: boolean
+   PB1Max: boolean
+   PB2Max: boolean
+   PMF1Max: boolean
+   PMF2Max: boolean
+   PMA1Max: boolean
+   PMA2Max: boolean
+   PS1Max: boolean
+   PS2Max: boolean
+   MastHeight: double
+   ID: integer
+   ComponentNumber: integer
+}
+class DataFacilitySignatures {
+   Front: double
+   Side: double
+   Rear: double
+   Top: double
+   ID: integer
+   Type: integer
+}
+class DataFuel {
+   Type: integer
+   Capacity: integer
+   ID: integer
+}
+class DataGroundUnit {
+   Name: text
+   Comments: text
+   Category: integer
+   OperatorCountry: integer
+   OperatorService: integer
+   YearCommissioned: integer
+   YearDecommissioned: integer
+   Area: double
+   Length: double
+   Width: double
+   MastHeight: double
+   Mass: double
+   Crew: integer
+   TroopCapacity: integer
+   ArmorGeneral: integer
+   DamagePoints: integer
+   MissileDefense: integer
+   CSGen: integer
+   Ergonomics: integer
+   OODADetectionCycle: integer
+   OODATargetingCycle: integer
+   OODAEvasiveCycle: integer
+   Hypothetical: boolean
+   Cost: integer
+   Deprecated: boolean
+   MaxSeaState: integer
+   Self_Cargo_Type: integer
+   Self_Cargo_Mass: double
+   Self_Cargo_Area: double
+   Self_Cargo_Crew: integer
+   Self_Cargo_Volume: double
+   Self_Cargo_ParadropCapable: boolean
+   Carry_Cargo_Type: integer
+   Carry_Cargo_Mass: double
+   Carry_Cargo_Area: double
+   Carry_Cargo_Crew: integer
+   Carry_Cargo_Volume: double
+   Tow_Mass: double
+   Setup: integer
+   ID: integer
+}
+class DataGroundUnitAircraftFacilities {
+   ComponentID: integer
+   ID: integer
+   ComponentNumber: integer
+}
+class DataGroundUnitCodes {
+   ID: integer
+   CodeID: integer
+}
+class DataGroundUnitComms {
+   ComponentID: integer
+   ParentSpecific: boolean
+   IsRelay: boolean
+   ID: integer
+   ComponentNumber: integer
+}
+class DataGroundUnitDockingFacilities {
+   ComponentID: integer
+   ID: integer
+   ComponentNumber: integer
+}
+class DataGroundUnitFuel {
+   ComponentID: integer
+   ID: integer
+   ComponentNumber: integer
+}
+class DataGroundUnitMagazines {
+   ComponentID: integer
+   ID: integer
+   ComponentNumber: integer
+}
+class DataGroundUnitMounts {
+   ComponentID: integer
+   SB1: boolean
+   SB2: boolean
+   SMF1: boolean
+   SMF2: boolean
+   SMA1: boolean
+   SMA2: boolean
+   SS1: boolean
+   SS2: boolean
+   PB1: boolean
+   PB2: boolean
+   PMF1: boolean
+   PMF2: boolean
+   PMA1: boolean
+   PMA2: boolean
+   PS1: boolean
+   PS2: boolean
+   ID: integer
+   ComponentNumber: integer
+}
+class DataGroundUnitPropulsion {
+   ComponentID: integer
+   ID: integer
+   ComponentNumber: integer
+}
+class DataGroundUnitSensors {
+   ComponentID: integer
+   SB1: boolean
+   SB2: boolean
+   SMF1: boolean
+   SMF2: boolean
+   SMA1: boolean
+   SMA2: boolean
+   SS1: boolean
+   SS2: boolean
+   PB1: boolean
+   PB2: boolean
+   PMF1: boolean
+   PMF2: boolean
+   PMA1: boolean
+   PMA2: boolean
+   PS1: boolean
+   PS2: boolean
+   SB1Max: boolean
+   SB2Max: boolean
+   SMF1Max: boolean
+   SMF2Max: boolean
+   SMA1Max: boolean
+   SMA2Max: boolean
+   SS1Max: boolean
+   SS2Max: boolean
+   PB1Max: boolean
+   PB2Max: boolean
+   PMF1Max: boolean
+   PMF2Max: boolean
+   PMA1Max: boolean
+   PMA2Max: boolean
+   PS1Max: boolean
+   PS2Max: boolean
+   MastHeight: double
+   ID: integer
+   ComponentNumber: integer
+}
+class DataGroundUnitSignatures {
+   Front: double
+   Side: double
+   Rear: double
+   Top: double
+   ID: integer
+   Type: integer
+}
+class DataLoadout {
+   Name: text
+   Comments: text
+   ROF: integer
+   Capacity: integer
+   ReadyTime: integer
+   ReadyTime_Sustained: integer
+   LoadoutRole: integer
+   TimeofDay: integer
+   Weather: integer
+   PayloadWeightDragModifier: double
+   DefaultCombatRadius: integer
+   DefaultTimeOnStation: integer
+   DefaultMissionProfile: integer
+   RequiresBuddyIllumination: boolean
+   Hypothetical: boolean
+   QuickTurnaround: boolean
+   QuickTurnaround_ReadyTime: integer
+   QuickTurnaround_MaxSorties: integer
+   QuickTurnaround_AdditionalTimePenalty: integer
+   QuickTurnaround_AirborneTime: integer
+   QuickTurnaround_TimeofDay: integer
+   WinchesterShotgun: integer
+   Cargo_Type: integer
+   Cargo_Mass: double
+   Cargo_Area: double
+   Cargo_Crew: double
+   Cargo_ParadropCapable: boolean
+   Cargo_Volume: integer
+   Deprecated: boolean
+   ID: integer
+}
+class DataLoadoutWeapons {
+   ComponentID: integer
+   Optional: boolean
+   Internal: boolean
+   ID: integer
+   ComponentNumber: integer
+}
+class DataMagazine {
+   Name: text
+   Comments: text
+   ArmorGeneral: integer
+   ROF: integer
+   Capacity: integer
+   AviationMagazine: boolean
+   Hypothetical: boolean
+   Deprecated: boolean
+   ID: integer
+}
+class DataMagazineWeapons {
+   ComponentID: integer
+   ID: integer
+   ComponentNumber: integer
+}
+class DataMount {
+   Name: text
+   Comments: text
+   ArmorGeneral: integer
+   ROF: integer
+   Capacity: integer
+   MagazineROF: integer
+   MagazineCapacity: integer
+   DamagePoints: double
+   Logistic: boolean
+   ReserveTarget: boolean
+   CanHotReload: boolean
+   Availability: integer
+   Trainable: boolean
+   Autonomous: boolean
+   LocalControl: boolean
+   Hypothetical: boolean
+   Cargo_Type: integer
+   Cargo_Mass: double
+   Cargo_Area: double
+   Cargo_Crew: double
+   Cargo_ParadropCapable: boolean
+   MobileUnitCategory: integer
+   Deprecated: boolean
+   ID: integer
+}
+class DataMountComms {
+   ComponentID: integer
+   ParentSpecific: boolean
+   IsRelay: boolean
+   ID: integer
+   ComponentNumber: integer
+}
+class DataMountDirectors {
+   ComponentID: integer
+   ID: integer
+   ComponentNumber: integer
+}
+class DataMountMagazineWeapons {
+   ComponentID: integer
+   ID: integer
+   ComponentNumber: integer
+}
+class DataMountSensors {
+   ComponentID: integer
+   ID: integer
+   ComponentNumber: integer
+}
+class DataMountWeapons {
+   ComponentID: integer
+   ID: integer
+   ComponentNumber: integer
+}
+class DataPropulsion {
+   Name: text
+   Type: integer
+   Comments: text
+   Hypothetical: boolean
+   NumberOfCompartments: double
+   NumberOfEngines: double
+   NumberOfShafts: double
+   CombinedType: integer
+   NumberOfEnginesPrim: double
+   NumberOfEnginesScnd: double
+   ThrustPerEngineMilitary: double
+   ThrustPerEngineAfterburner: double
+   SFCMilitary: double
+   SFCAfterburner: double
+   Deprecated: boolean
+   ID: integer
+}
+class DataPropulsionPerformance {
+   Speed: integer
+   AltitudeMin: double
+   AltitudeMax: double
+   Consumption: double
+   ID: integer
+   AltitudeBand: integer
+   Throttle: integer
+}
+class DataSatellite {
+   Category: integer
+   Type: integer
+   Name: text
+   Comments: text
+   OperatorCountry: integer
+   OperatorService: integer
+   YearCommissioned: integer
+   YearDecommissioned: integer
+   Length: double
+   Span: double
+   Height: double
+   WeightEmpty: integer
+   WeightMax: integer
+   WeightPayload: integer
+   Armor: integer
+   DamagePoints: integer
+   MRVInclination: double
+   MRVApogeePerigee: double
+   CSGen: integer
+   OODADetectionCycle: integer
+   OODATargetingCycle: integer
+   OODAEvasiveCycle: integer
+   Hypothetical: boolean
+   Cost: integer
+   Deprecated: boolean
+   ID: integer
+}
+class DataSatelliteCodes {
+   ID: integer
+   CodeID: integer
+}
+class DataSatelliteComms {
+   ComponentID: integer
+   ParentSpecific: boolean
+   IsRelay: boolean
+   ID: integer
+   ComponentNumber: integer
+}
+class DataSatelliteMounts {
+   ComponentID: integer
+   SB1: boolean
+   SB2: boolean
+   SMF1: boolean
+   SMF2: boolean
+   SMA1: boolean
+   SMA2: boolean
+   SS1: boolean
+   SS2: boolean
+   PB1: boolean
+   PB2: boolean
+   PMF1: boolean
+   PMF2: boolean
+   PMA1: boolean
+   PMA2: boolean
+   PS1: boolean
+   PS2: boolean
+   ID: integer
+   ComponentNumber: integer
+}
+class DataSatelliteOrbits {
+   MissonID: text
+   MissonName: text
+   OrbitNumber: integer
+   LaunchDate: datetime
+   CommissioningDate: datetime
+   DecommissioningDate: datetime
+   DeOrbitingDate: datetime
+   SatelliteNumber: double
+   InternationalDesignator1: text
+   InternationalDesignator2: text
+   InternationalDesignator3: text
+   EpochYear: double
+   EpochDay: double
+   FirstTimeDerivativeOfTheMeanMotionDividedByTwo: text
+   SecondTimeDerivativeOfTheMeanMotionDividedBySix: text
+   BSTAR: double
+   ElementNumber: double
+   Inclination: double
+   RightAscensionOfTheAscendingNode: double
+   Eccentricity: double
+   ArgumentOfPerigee: double
+   MeanAnomaly: double
+   MeanMotion: double
+   RevolutionNumberAtEpoch: double
+   Comments: text
+   Perigee: double
+   Apogee: double
+   OrbitalPeriod: double
+   Plane: integer
+   Operational: boolean
+   TLE: text
+   ID: integer
+   ComponentNumber: integer
+}
+class DataSatelliteSensors {
+   ComponentID: integer
+   SB1: boolean
+   SB2: boolean
+   SMF1: boolean
+   SMF2: boolean
+   SMA1: boolean
+   SMA2: boolean
+   SS1: boolean
+   SS2: boolean
+   PB1: boolean
+   PB2: boolean
+   PMF1: boolean
+   PMF2: boolean
+   PMA1: boolean
+   PMA2: boolean
+   PS1: boolean
+   PS2: boolean
+   SB1Max: boolean
+   SB2Max: boolean
+   SMF1Max: boolean
+   SMF2Max: boolean
+   SMA1Max: boolean
+   SMA2Max: boolean
+   SS1Max: boolean
+   SS2Max: boolean
+   PB1Max: boolean
+   PB2Max: boolean
+   PMF1Max: boolean
+   PMF2Max: boolean
+   PMA1Max: boolean
+   PMA2Max: boolean
+   PS1Max: boolean
+   PS2Max: boolean
+   ID: integer
+   ComponentNumber: integer
+}
+class DataSatelliteSignatures {
+   Front: double
+   Side: double
+   Rear: double
+   Top: double
+   ID: integer
+   Type: integer
+}
+class DataSensor {
+   Name: text
+   Comments: text
+   Type: integer
+   Role: integer
+   Generation: integer
+   MasqueradeAs: integer
+   RangeMin: double
+   RangeMax: double
+   AltitudeMin: integer
+   AltitudeMax: integer
+   AltitudeMin_ASL: integer
+   AltitudeMax_ASL: integer
+   ScanInterval: integer
+   ResolutionRange: double
+   ResolutionHeight: integer
+   ResolutionAngle: double
+   DirectionFindingAccuracy: double
+   MaxContactsAir: integer
+   MaxContactsSurface: integer
+   MaxContactsSubmarine: integer
+   MaxContactsIlluminate: integer
+   Availability: integer
+   FrequencyUpper: double
+   FrequencyLower: double
+   FrequencyLowerIlluminate: double
+   FrequencyUpperIlluminate: double
+   RadarHorizontalBeamwidth: double
+   RadarVerticalBeamwidth: double
+   RadarSystemNoiseLevel: double
+   RadarProcessingGainLoss: double
+   RadarPeakPower: double
+   RadarPulseWidth: double
+   RadarBlindTime: double
+   RadarPRF: integer
+   RadarHorizontalBeamwidthIlluminate: double
+   RadarVerticalBeamwidthIlluminate: double
+   RadarSystemNoiseLevelIlluminate: double
+   RadarProcessingGainLossIlluminate: double
+   RadarPeakPowerIlluminate: double
+   RadarPulseWidthIlluminate: double
+   RadarBlindTimeIlluminate: double
+   RadarPRFIlluminate: integer
+   ESMSensitivity: double
+   ESMSystemLoss: double
+   ESMNumberOfChannels: double
+   ESMPreciseEmitterID: boolean
+   ECMGain: double
+   ECMPeakPower: double
+   ECMBandwidth: double
+   ECMNumberOfTargets: integer
+   ECMPoKReduction: double
+   SonarSourceLevel: double
+   SonarPulseLength: double
+   SonarDirectivityIndex: double
+   SonarRecognitionDifferentialActive: double
+   SonarRecognitionDifferentialPassive: double
+   SonarSensorToMachineryDistance: double
+   SonarTowLength: double
+   SonarMinimumDeploymentDepth: double
+   SonarMaximumDeploymentDepth: double
+   SonarCZNumber: integer
+   VisualDetectionZoomLevel: double
+   VisualClassificationZoomLevel: double
+   IRDetectionZoomLevel: double
+   IRClassificationZoomLevel: double
+   MineSweepWidth: integer
+   MineSweepMinimumDepth: integer
+   MineSweepMaximumDepth: integer
+   MineSweepMaximumSpeed: integer
+   Hypothetical: boolean
+   MinimumSignature_Radar: double
+   MinimumSignature_Visual: double
+   MinimumSignature_IR: double
+   MinimumSignature_ESM: double
+   MinimumSignature_ActiveSonar: double
+   MinimumSignature_PassiveSonar: double
+   Deprecated: boolean
+   ID: integer
+}
+class DataSensorCapabilities {
+   ID: integer
+   CodeID: integer
+}
+class DataSensorCodes {
+   ID: integer
+   CodeID: integer
+}
+class DataSensorFrequencyIlluminate {
+   ID: integer
+   Frequency: integer
+}
+class DataSensorFrequencySearchAndTrack {
+   ID: integer
+   Frequency: integer
+}
+class DataSensorSensorGroups {
+   ComponentID: integer
+   ID: integer
+   ComponentNumber: integer
+}
+class DataShip {
+   Category: integer
+   Type: integer
+   Name: text
+   Comments: text
+   OperatorCountry: integer
+   OperatorService: integer
+   YearCommissioned: integer
+   YearDecommissioned: integer
+   Length: double
+   Beam: double
+   Draft: double
+   Height: double
+   DisplacementEmpty: integer
+   DisplacementStandard: integer
+   DisplacementFull: integer
+   Crew: integer
+   ArmorBelt: integer
+   ArmorBulkheads: integer
+   ArmorDeck: integer
+   ArmorBridge: integer
+   ArmorCIC: integer
+   ArmorEngineering: integer
+   ArmorRudder: integer
+   DamagePoints: integer
+   FOCSeaState: integer
+   MaxSeaState: integer
+   RepairCapacity: integer
+   TroopCapacity: integer
+   CargoCapacity: integer
+   MissileDefense: integer
+   CSGen: integer
+   Ergonomics: integer
+   OODADetectionCycle: integer
+   OODATargetingCycle: integer
+   OODAEvasiveCycle: integer
+   PhysicalSizeCode: integer
+   Hypothetical: boolean
+   Cargo_Type: integer
+   Cargo_Mass: double
+   Cargo_Area: double
+   Cargo_Crew: double
+   Cargo_Volume: integer
+   Cost: integer
+   Deprecated: boolean
+   ID: integer
+}
+class DataShipAircraftFacilities {
+   ComponentID: integer
+   ID: integer
+   ComponentNumber: integer
+}
+class DataShipCodes {
+   ID: integer
+   CodeID: integer
+}
+class DataShipComms {
+   ComponentID: integer
+   ParentSpecific: boolean
+   IsRelay: boolean
+   ID: integer
+   ComponentNumber: integer
+}
+class DataShipDockingFacilities {
+   ComponentID: integer
+   ID: integer
+   ComponentNumber: integer
+}
+class DataShipFuel {
+   ComponentID: integer
+   ID: integer
+   ComponentNumber: integer
+}
+class DataShipMagazines {
+   ComponentID: integer
+   ID: integer
+   ComponentNumber: integer
+}
+class DataShipMounts {
+   ComponentID: integer
+   SB1: boolean
+   SB2: boolean
+   SMF1: boolean
+   SMF2: boolean
+   SMA1: boolean
+   SMA2: boolean
+   SS1: boolean
+   SS2: boolean
+   PB1: boolean
+   PB2: boolean
+   PMF1: boolean
+   PMF2: boolean
+   PMA1: boolean
+   PMA2: boolean
+   PS1: boolean
+   PS2: boolean
+   Offset: integer
+   ID: integer
+   ComponentNumber: integer
+}
+class DataShipPropulsion {
+   ComponentID: integer
+   ID: integer
+   ComponentNumber: integer
+}
+class DataShipSensors {
+   ComponentID: integer
+   DegOverride: integer
+   SB1: boolean
+   SB2: boolean
+   SMF1: boolean
+   SMF2: boolean
+   SMA1: boolean
+   SMA2: boolean
+   SS1: boolean
+   SS2: boolean
+   PB1: boolean
+   PB2: boolean
+   PMF1: boolean
+   PMF2: boolean
+   PMA1: boolean
+   PMA2: boolean
+   PS1: boolean
+   PS2: boolean
+   DegOverrideMax: integer
+   SB1Max: boolean
+   SB2Max: boolean
+   SMF1Max: boolean
+   SMF2Max: boolean
+   SMA1Max: boolean
+   SMA2Max: boolean
+   SS1Max: boolean
+   SS2Max: boolean
+   PB1Max: boolean
+   PB2Max: boolean
+   PMF1Max: boolean
+   PMF2Max: boolean
+   PMA1Max: boolean
+   PMA2Max: boolean
+   PS1Max: boolean
+   PS2Max: boolean
+   VerticalDegMax: integer
+   MastHeight: double
+   ID: integer
+   ComponentNumber: integer
+}
+class DataShipSignatures {
+   Front: double
+   Side: double
+   Rear: double
+   Top: double
+   ID: integer
+   Type: integer
+}
+class DataSubmarine {
+   Category: integer
+   Type: integer
+   Name: text
+   OperatorCountry: integer
+   OperatorService: integer
+   YearCommissioned: integer
+   YearDecommissioned: integer
+   Comments: text
+   MaxDepth: integer
+   DamagePoints: integer
+   Length: double
+   Beam: double
+   Draft: double
+   Height: double
+   DisplacementEmpty: integer
+   DisplacementStandard: integer
+   DisplacementFull: integer
+   Crew: integer
+   CSGen: integer
+   Ergonomics: integer
+   OODADetectionCycle: integer
+   OODATargetingCycle: integer
+   OODAEvasiveCycle: integer
+   ROVRadius: double
+   PhysicalSizeCode: integer
+   Hypothetical: boolean
+   Cost: integer
+   Cargo_Volume: integer
+   Deprecated: boolean
+   ID: integer
+}
+class DataSubmarineAircraftFacilities {
+   ComponentID: integer
+   ID: integer
+   ComponentNumber: integer
+}
+class DataSubmarineCodes {
+   ID: integer
+   CodeID: integer
+}
+class DataSubmarineComms {
+   ComponentID: integer
+   ParentSpecific: boolean
+   IsRelay: boolean
+   ID: integer
+   ComponentNumber: integer
+}
+class DataSubmarineDockingFacilities {
+   ComponentID: integer
+   ID: integer
+   ComponentNumber: integer
+}
+class DataSubmarineFuel {
+   ComponentID: integer
+   ID: integer
+   ComponentNumber: integer
+}
+class DataSubmarineMagazines {
+   ComponentID: integer
+   ID: integer
+   ComponentNumber: integer
+}
+class DataSubmarineMounts {
+   ComponentID: integer
+   SB1: boolean
+   SB2: boolean
+   SMF1: boolean
+   SMF2: boolean
+   SMA1: boolean
+   SMA2: boolean
+   SS1: boolean
+   SS2: boolean
+   PB1: boolean
+   PB2: boolean
+   PMF1: boolean
+   PMF2: boolean
+   PMA1: boolean
+   PMA2: boolean
+   PS1: boolean
+   PS2: boolean
+   ID: integer
+   ComponentNumber: integer
+}
+class DataSubmarinePropulsion {
+   ComponentID: integer
+   ID: integer
+   ComponentNumber: integer
+}
+class DataSubmarineSensors {
+   ComponentID: integer
+   SB1: boolean
+   SB2: boolean
+   SMF1: boolean
+   SMF2: boolean
+   SMA1: boolean
+   SMA2: boolean
+   SS1: boolean
+   SS2: boolean
+   PB1: boolean
+   PB2: boolean
+   PMF1: boolean
+   PMF2: boolean
+   PMA1: boolean
+   PMA2: boolean
+   PS1: boolean
+   PS2: boolean
+   SB1Max: boolean
+   SB2Max: boolean
+   SMF1Max: boolean
+   SMF2Max: boolean
+   SMA1Max: boolean
+   SMA2Max: boolean
+   SS1Max: boolean
+   SS2Max: boolean
+   PB1Max: boolean
+   PB2Max: boolean
+   PMF1Max: boolean
+   PMF2Max: boolean
+   PMA1Max: boolean
+   PMA2Max: boolean
+   PS1Max: boolean
+   PS2Max: boolean
+   ID: integer
+   ComponentNumber: integer
+}
+class DataSubmarineSignatures {
+   Front: double
+   Side: double
+   Rear: double
+   Top: double
+   ID: integer
+   Type: integer
+}
+class DataWarhead {
+   Name: text
+   Comments: text
+   Type: integer
+   DamagePoints: double
+   ProjectileCaliber: integer
+   ExplosivesType: integer
+   ExplosivesWeight: double
+   NumberOfWarheads: integer
+   ClusterBombDispersionAreaLength: integer
+   ClusterBombDispersionAreaWidth: integer
+   Hypothetical: boolean
+   Deprecated: boolean
+   ID: integer
+}
+class DataWeapon {
+   Name: text
+   Comments: text
+   Type: integer
+   Generation: integer
+   Length: double
+   Span: double
+   Diameter: double
+   Weight: double
+   BurnoutTime: double
+   BurnoutWeight: double
+   CruiseAltitude: double
+   CruiseAltitude_ASL: double
+   WaypointNumber: integer
+   IlluminationTime: integer
+   CEP: integer
+   CEPSurface: integer
+   AirPoK: double
+   SurfacePoK: double
+   LandPoK: double
+   SubsurfacePoK: double
+   ClimbRate: double
+   AirRangeMax: double
+   AirRangeMin: double
+   SurfaceRangeMax: double
+   SurfaceRangeMin: double
+   LandRangeMax: double
+   LandRangeMin: double
+   SubsurfaceRangeMax: double
+   SubsurfaceRangeMin: double
+   LaunchSpeedMax: integer
+   LaunchSpeedMin: integer
+   LaunchAltitudeMax: double
+   LaunchAltitudeMin: double
+   LaunchAltitudeMax_ASL: double
+   LaunchAltitudeMin_ASL: double
+   TargetSpeedMax: integer
+   TargetSpeedMin: integer
+   TargetAltitudeMax: double
+   TargetAltitudeMin: double
+   TargetAltitudeMax_ASL: double
+   TargetAltitudeMin_ASL: double
+   SnapUpDownAltitude: double
+   CanActAsSensor: boolean
+   MaxFlightTime: integer
+   DetonationDelay: integer
+   TorpedoSpeedCruise: integer
+   TorpedoRangeCruise: double
+   TorpedoSpeedFull: integer
+   TorpedoRangeFull: double
+   Hypothetical: boolean
+   BuddyIlluminationForCEC: boolean
+   Cargo_Type: integer
+   Cargo_Mass: double
+   Cargo_Volume: double
+   Cargo_Crew: double
+   Cargo_ParadropCapable: boolean
+   Cost: integer
+   Deprecated: boolean
+   ID: integer
+}
+class DataWeaponCodes {
+   ID: integer
+   CodeID: integer
+}
+class DataWeaponComms {
+   ComponentID: integer
+   ParentSpecific: boolean
+   IsRelay: boolean
+   ID: integer
+   ComponentNumber: integer
+}
+class DataWeaponDirectors {
+   ComponentID: integer
+   ID: integer
+   ComponentNumber: integer
+}
+class DataWeaponFuel {
+   ComponentID: integer
+   ID: integer
+   ComponentNumber: integer
+}
+class DataWeaponPropulsion {
+   ComponentID: integer
+   ID: integer
+   ComponentNumber: integer
+}
+class DataWeaponRecord {
+   ComponentID: integer
+   DefaultLoad: integer
+   MaxLoad: integer
+   ROF: integer
+   Multiple: integer
+   Deprecated: boolean
+   ID: integer
+}
+class DataWeaponSensors {
+   ComponentID: integer
+   SB1: boolean
+   SB2: boolean
+   SMF1: boolean
+   SMF2: boolean
+   SMA1: boolean
+   SMA2: boolean
+   SS1: boolean
+   SS2: boolean
+   PB1: boolean
+   PB2: boolean
+   PMF1: boolean
+   PMF2: boolean
+   PMA1: boolean
+   PMA2: boolean
+   PS1: boolean
+   PS2: boolean
+   SB1Max: boolean
+   SB2Max: boolean
+   SMF1Max: boolean
+   SMF2Max: boolean
+   SMA1Max: boolean
+   SMA2Max: boolean
+   SS1Max: boolean
+   SS2Max: boolean
+   PB1Max: boolean
+   PB2Max: boolean
+   PMF1Max: boolean
+   PMF2Max: boolean
+   PMA1Max: boolean
+   PMA2Max: boolean
+   PS1Max: boolean
+   PS2Max: boolean
+   ID: integer
+   ComponentNumber: integer
+}
+class DataWeaponSignatures {
+   Front: double
+   Side: double
+   Rear: double
+   ID: integer
+   Type: integer
+}
+class DataWeaponTargets {
+   ID: integer
+   CodeID: integer
+}
+class DataWeaponWRA {
+   WeaponQty: integer
+   ShooterQty: integer
+   AutoFireRange: integer
+   SelfDefenceRange: integer
+   ID: integer
+   CodeID: integer
+}
+class DataWeaponWarheads {
+   ComponentID: integer
+   ID: integer
+   ComponentNumber: integer
+}
+class DataWeaponWeapons {
+   ComponentID: integer
+   ID: integer
+   ComponentNumber: integer
+}
+class EnumAircraftAutonomousControlLevel {
+   Description: text
+   OnSignalLoss: text
+   ID: integer
+}
+class EnumAircraftCategory {
+   Description: text
+   ID: integer
+}
+class EnumAircraftCockpitGen {
+   Description: text
+   Example: text
+   OODADetectionCycle: integer
+   OODATargetingCycle: integer
+   OODAEvasiveCycle: integer
+   ID: integer
+}
+class EnumAircraftCockpitVisibility {
+   Description: text
+   ID: text
+}
+class EnumAircraftCode {
+   Description: text
+   ID: integer
+}
+class EnumAircraftFacilityType {
+   Description: text
+   ID: integer
+}
+class EnumAircraftPhysicalSize {
+   Description: text
+   ID: integer
+}
+class EnumAircraftType {
+   Description: text
+   ID: integer
+}
+class EnumArcs {
+   Description: text
+   ID: integer
+}
+class EnumArmorType {
+   Description: text
+   ID: integer
+}
+class EnumCargoType {
+   Description: text
+   ID: integer
+}
+class EnumCommCapability {
+   Description: text
+   ID: integer
+}
+class EnumCommLatency {
+   Description: text
+   Capability: text
+   Example: text
+   ID: integer
+}
+class EnumCommQuality {
+   Description: text
+   Capability: text
+   Example: text
+   ID: integer
+}
+class EnumCommType {
+   Description: text
+   ID: integer
+}
+class EnumContainerType {
+   Description: text
+   ID: integer
+}
+class EnumDockingFacilityPhysicalSize {
+   Description: text
+   ID: integer
+}
+class EnumDockingFacilityType {
+   Description: text
+   ID: integer
+}
+class EnumErgonomics {
+   Description: text
+   OODADetectionModPercent: integer
+   OODATargetingModPercent: integer
+   OODAEvasiveModPercent: integer
+   ID: integer
+}
+class EnumFacilityCSGen {
+   Description: text
+   Example: text
+   OODADetectionCycle: integer
+   OODATargetingCycle: integer
+   OODAEvasiveCycle: integer
+   ID: integer
+}
+class EnumFacilityCategory {
+   Description: text
+   ID: integer
+}
+class EnumFacilityType {
+   Description: text
+   ID: integer
+}
+class EnumFuelType {
+   Description: text
+   ID: integer
+}
+class EnumGroundUnitCSGen {
+   Description: text
+   Example: text
+   OODADetectionCycle: integer
+   OODATargetingCycle: integer
+   OODAEvasiveCycle: integer
+   ID: integer
+}
+class EnumGroundUnitCategory {
+   Description: text
+   ID: integer
+}
+class EnumGroundUnitCode {
+   Description: text
+   ID: integer
+}
+class EnumLoadoutMissionProfile {
+   Description: text
+   FormUpTime: double
+   FormUpAltitude: double
+   CruiseAltitudeIngress: double
+   CruiseAltitudeIngressTerrainFollowing: boolean
+   CruiseAltitudeEgress: double
+   CruiseAltitudeEgressTerrainFollowing: boolean
+   CruiseThrottleSettingIngress: double
+   CruiseThrottleSettingEgress: double
+   CruiseOneWayOnly: boolean
+   CruiseAtOptimumAltitude: boolean
+   AttackAltitudeEgress: double
+   AttackAltitudeEgressTerrainFollowing: boolean
+   AttackAltitudeIngress: double
+   AttackAltitudeIngressTerrainFollowing: boolean
+   AttackThrottleSetting: double
+   AttackDistanceIngress: double
+   AttackDistanceEgress: double
+   DropBombsAtMaxRange: boolean
+   StationAltitude: double
+   StationAltitudeTerrainFollowing: boolean
+   StationThrottleSetting: double
+   CombatAltitude: double
+   CombatThrottleSetting: double
+   CombatDuration: double
+   ReservePercentage: double
+   ReserveLoiterTime: double
+   ReserveLoiterAltitude: double
+   ID: integer
+}
+class EnumLoadoutRole {
+   Description: text
+   ID: integer
+}
+class EnumLoadoutTimeOfDay {
+   Description: text
+   ID: integer
+}
+class EnumLoadoutWeather {
+   Description: text
+   ID: integer
+}
+class EnumLoadoutWinchesterShotgun {
+   Description: text
+   ID: integer
+}
+class EnumOperatorCountry {
+   Description: text
+   YearStart: integer
+   YearEnd: integer
+   ID: integer
+}
+class EnumOperatorService {
+   Description: text
+   ID: integer
+}
+class EnumPropulsionCombinedType {
+   Description: text
+   ID: integer
+}
+class EnumPropulsionType {
+   Description: text
+   ID: integer
+}
+class EnumRunwayLength {
+   Description: text
+   ID: integer
+}
+class EnumSatelliteCSGen {
+   Description: text
+   Example: text
+   YearStart: integer
+   YearEnd: integer
+   OODADetectionCycle: integer
+   OODATargetingCycle: integer
+   OODAEvasiveCycle: integer
+   ID: integer
+}
+class EnumSatelliteCategory {
+   Description: text
+   ID: integer
+}
+class EnumSatelliteCode {
+   Description: text
+   ID: integer
+}
+class EnumSatelliteOrbitPlane {
+   Description: text
+   ID: integer
+}
+class EnumSatelliteType {
+   Description: text
+   ID: integer
+}
+class EnumSensorCapability {
+   Description: text
+   ID: integer
+}
+class EnumSensorCode {
+   Description: text
+   ID: integer
+}
+class EnumSensorFrequency {
+   Description: text
+   ID: integer
+}
+class EnumSensorGeneration {
+   Description: text
+   ID: integer
+}
+class EnumSensorRole {
+   Description: text
+   Comment: text
+   ID: integer
+}
+class EnumSensorType {
+   Description: text
+   ID: integer
+}
+class EnumShipCSGen {
+   Description: text
+   Example: text
+   YearStart: integer
+   YearEnd: integer
+   Architecture: text
+   OODADetectionCycle: integer
+   OODATargetingCycle: integer
+   OODAEvasiveCycle: integer
+   TrackCap: integer
+   ID: integer
+}
+class EnumShipCategory {
+   Description: text
+   ID: integer
+}
+class EnumShipCode {
+   Description: text
+   ID: integer
+}
+class EnumShipPhysicalSize {
+   Description: text
+   ID: integer
+}
+class EnumShipType {
+   Description: text
+   YearStart: integer
+   YearEnd: integer
+   ID: integer
+}
+class EnumSignatureType {
+   Description: text
+   ID: integer
+}
+class EnumSubmarineCSGen {
+   Description: text
+   Example: text
+   YearStart: integer
+   YearEnd: integer
+   OODADetectionCycle: integer
+   OODATargetingCycle: integer
+   OODAEvasiveCycle: integer
+   Architecture: text
+   ID: integer
+}
+class EnumSubmarineCategory {
+   Description: text
+   ID: integer
+}
+class EnumSubmarineCode {
+   Description: text
+   ID: integer
+}
+class EnumSubmarinePhysicalSize {
+   Description: text
+   ID: integer
+}
+class EnumSubmarineType {
+   Description: text
+   ID: integer
+}
+class EnumWarheadCaliber {
+   Description: text
+   ID: integer
+}
+class EnumWarheadExplosivesType {
+   Description: text
+   TNTEquivalent: double
+   Comment: text
+   ID: integer
+}
+class EnumWarheadType {
+   Description: text
+   ID: integer
+}
+class EnumWeaponCode {
+   Description: text
+   ID: integer
+}
+class EnumWeaponGeneration {
+   Description: text
+   ID: integer
+}
+class EnumWeaponImpactType {
+   Description: text
+   ID: integer
+}
+class EnumWeaponProfileAttack {
+   Description: text
+   ID: integer
+}
+class EnumWeaponProfileCruise {
+   Description: text
+   ID: integer
+}
+class EnumWeaponTarget {
+   Description: text
+   ID: integer
+}
+class EnumWeaponType {
+   Description: text
+   ID: integer
+}
+class EnumWeaponWRA {
+   Description: text
+   ID: integer
+}
+class EnumWeaponWRAAutoFireRange {
+   Description: text
+   ID: integer
+}
+class EnumWeaponWRASelfDefenceRange {
+   Description: text
+   ID: integer
+}
+class EnumWeaponWRAShooterQty {
+   Description: text
+   ID: integer
+}
+class EnumWeaponWRAWeaponQty {
+   Description: text
+   ID: integer
+}
+class ManagementDatabase {
+   Description: text
+   ID: integer
+}
+class sqlite_master {
+   type: text
+   name: text
+   tbl_name: text
+   rootpage: int
+   sql: text
+}
+
+DataAircraftCodes                   -[#595959,plain]-^  DataAircraft                       : "ID"
+DataAircraftComms                   -[#595959,plain]-^  DataAircraft                       : "ID"
+DataAircraftFuel                    -[#595959,plain]-^  DataAircraft                       : "ID"
+DataAircraftLoadouts                -[#595959,plain]-^  DataAircraft                       : "ID"
+DataAircraftMounts                  -[#595959,plain]-^  DataAircraft                       : "ID"
+DataAircraftPropulsion              -[#595959,plain]-^  DataAircraft                       : "ID"
+DataAircraftSensors                 -[#595959,plain]-^  DataAircraft                       : "ID"
+DataAircraftSignatures              -[#595959,plain]-^  DataAircraft                       : "ID"
+DataCommCapabilities                -[#595959,plain]-^  DataComm                           : "ID"
+DataCommDirectors                   -[#595959,plain]-^  DataComm                           : "ID"
+DataCommTypeCanTalkTo               -[#595959,plain]-^  DataCommType                       : "ID"
+DataFacilityAircraftFacilities      -[#595959,plain]-^  DataFacility                       : "ID"
+DataFacilityComms                   -[#595959,plain]-^  DataFacility                       : "ID"
+DataFacilityDockingFacilities       -[#595959,plain]-^  DataFacility                       : "ID"
+DataFacilityFuel                    -[#595959,plain]-^  DataFacility                       : "ID"
+DataFacilityMagazines               -[#595959,plain]-^  DataFacility                       : "ID"
+DataFacilityMounts                  -[#595959,plain]-^  DataFacility                       : "ID"
+DataFacilitySensors                 -[#595959,plain]-^  DataFacility                       : "ID"
+DataFacilitySignatures              -[#595959,plain]-^  DataFacility                       : "ID"
+DataGroundUnitAircraftFacilities    -[#595959,plain]-^  DataGroundUnit                     : "ID"
+DataGroundUnitCodes                 -[#595959,plain]-^  DataGroundUnit                     : "ID"
+DataGroundUnitComms                 -[#595959,plain]-^  DataGroundUnit                     : "ID"
+DataGroundUnitDockingFacilities     -[#595959,plain]-^  DataGroundUnit                     : "ID"
+DataGroundUnitFuel                  -[#595959,plain]-^  DataGroundUnit                     : "ID"
+DataGroundUnitMagazines             -[#595959,plain]-^  DataGroundUnit                     : "ID"
+DataGroundUnitMounts                -[#595959,plain]-^  DataGroundUnit                     : "ID"
+DataGroundUnitPropulsion            -[#595959,plain]-^  DataGroundUnit                     : "ID"
+DataGroundUnitSensors               -[#595959,plain]-^  DataGroundUnit                     : "ID"
+DataGroundUnitSignatures            -[#595959,plain]-^  DataGroundUnit                     : "ID"
+DataLoadoutWeapons                  -[#595959,plain]-^  DataLoadout                        : "ID"
+DataMagazineWeapons                 -[#595959,plain]-^  DataMagazine                       : "ID"
+DataMountComms                      -[#595959,plain]-^  DataMount                          : "ID"
+DataMountDirectors                  -[#595959,plain]-^  DataMount                          : "ID"
+DataMountMagazineWeapons            -[#595959,plain]-^  DataMount                          : "ID"
+DataMountSensors                    -[#595959,plain]-^  DataMount                          : "ID"
+DataMountWeapons                    -[#595959,plain]-^  DataMount                          : "ID"
+DataPropulsionPerformance           -[#595959,plain]-^  DataPropulsion                     : "ID"
+DataSatelliteCodes                  -[#595959,plain]-^  DataSatellite                      : "ID"
+DataSatelliteComms                  -[#595959,plain]-^  DataSatellite                      : "ID"
+DataSatelliteMounts                 -[#595959,plain]-^  DataSatellite                      : "ID"
+DataSatelliteOrbits                 -[#595959,plain]-^  DataSatellite                      : "ID"
+DataSatelliteSensors                -[#595959,plain]-^  DataSatellite                      : "ID"
+DataSatelliteSignatures             -[#595959,plain]-^  DataSatellite                      : "ID"
+DataSensorCapabilities              -[#595959,plain]-^  DataSensor                         : "ID"
+DataSensorCodes                     -[#595959,plain]-^  DataSensor                         : "ID"
+DataSensorFrequencyIlluminate       -[#595959,plain]-^  DataSensor                         : "ID"
+DataSensorFrequencySearchAndTrack   -[#595959,plain]-^  DataSensor                         : "ID"
+DataSensorSensorGroups              -[#595959,plain]-^  DataSensor                         : "ID"
+DataShipAircraftFacilities          -[#595959,plain]-^  DataShip                           : "ID"
+DataShipCodes                       -[#595959,plain]-^  DataShip                           : "ID"
+DataShipComms                       -[#595959,plain]-^  DataShip                           : "ID"
+DataShipDockingFacilities           -[#595959,plain]-^  DataShip                           : "ID"
+DataShipFuel                        -[#595959,plain]-^  DataShip                           : "ID"
+DataShipMagazines                   -[#595959,plain]-^  DataShip                           : "ID"
+DataShipMounts                      -[#595959,plain]-^  DataShip                           : "ID"
+DataShipPropulsion                  -[#595959,plain]-^  DataShip                           : "ID"
+DataShipSensors                     -[#595959,plain]-^  DataShip                           : "ID"
+DataShipSignatures                  -[#595959,plain]-^  DataShip                           : "ID"
+DataSubmarineAircraftFacilities     -[#595959,plain]-^  DataSubmarine                      : "ID"
+DataSubmarineCodes                  -[#595959,plain]-^  DataSubmarine                      : "ID"
+DataSubmarineComms                  -[#595959,plain]-^  DataSubmarine                      : "ID"
+DataSubmarineDockingFacilities      -[#595959,plain]-^  DataSubmarine                      : "ID"
+DataSubmarineFuel                   -[#595959,plain]-^  DataSubmarine                      : "ID"
+DataSubmarineMagazines              -[#595959,plain]-^  DataSubmarine                      : "ID"
+DataSubmarineMounts                 -[#595959,plain]-^  DataSubmarine                      : "ID"
+DataSubmarinePropulsion             -[#595959,plain]-^  DataSubmarine                      : "ID"
+DataSubmarineSensors                -[#595959,plain]-^  DataSubmarine                      : "ID"
+DataSubmarineSignatures             -[#595959,plain]-^  DataSubmarine                      : "ID"
+DataWeaponCodes                     -[#595959,plain]-^  DataWeapon                         : "ID"
+DataWeaponComms                     -[#595959,plain]-^  DataWeapon                         : "ID"
+DataWeaponDirectors                 -[#595959,plain]-^  DataWeapon                         : "ID"
+DataWeaponFuel                      -[#595959,plain]-^  DataWeapon                         : "ID"
+DataWeaponPropulsion                -[#595959,plain]-^  DataWeapon                         : "ID"
+DataWeaponSensors                   -[#595959,plain]-^  DataWeapon                         : "ID"
+DataWeaponSignatures                -[#595959,plain]-^  DataWeapon                         : "ID"
+DataWeaponTargets                   -[#595959,plain]-^  DataWeapon                         : "ID"
+DataWeaponWRA                       -[#595959,plain]-^  DataWeapon                         : "ID"
+DataWeaponWarheads                  -[#595959,plain]-^  DataWeapon                         : "ID"
+@enduml
