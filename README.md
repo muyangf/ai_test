@@ -1,82 +1,65 @@
-🏢 Enterprise Multi-Agent Routing System (企业级多智能体调度中枢)
-基于 LangGraph 和 MCP (Model Context Protocol) 构建的高可扩展、具备人工审批机制的企业级 AI 智能体系统。
+🦅 Military Knowledge Graph Agent (军工图谱智能决策中枢)
+本项目是一个基于 LangGraph 和 MCP (Model Context Protocol) 架构构建的本地化军工战术推演智能体。系统底层依托 NebulaGraph 分布式图数据库，深度重构了现代海空战（基于 CMO / DB3K）的底层数据逻辑，使大语言模型（LLM）能够通过自然语言执行复杂的兵棋推演与微观战术查询。
 
-本系统不仅是一个简单的对话机器人，而是一个**“AI 操作系统”**。它拥有一个绝对理智的前台路由大脑（Router），能够根据用户意图，将任务精准分发给不同的“虚拟专家部门”（军工数据、SAP 实施、PCB 供应链风控），并在执行关键物理操作前触发人工断点审批（HITL）。
+✨ 核心特性
+🔒 极致安全与本地化：大脑由本地 Ollama (如 Qwen3.5) 驱动，数据存放在本地 NebulaGraph 中，彻底阻断敏感军工数据外泄。
 
-✨ 核心特性 (Core Features)
-🔀 纯文本防弹路由 (Bulletproof Routing)：通过 temperature=0 的大模型进行严格的意图分类（降级策略），彻底杜绝 JSON 解析崩溃，确保高并发下的分发稳定性。
+🕸️ 全域微观图谱引擎 (V6 满编版)：
 
-🔌 MCP 技能物理解耦 (Skill Decoupling)：采用外部独立运行的 MCP Server（如 mcp_military_server.py），实现 Agent 代码与底层数据源的物理隔离。未来接入数据库、API 或 ERP 系统，主控代码无需修改任何一行。
+将传统关系型军工数据（SQLite）进行“降维打击”，转化为高效的图结构。
 
-🛡️ 人工断点审批 (Human-in-the-Loop, HITL)：在执行核心业务（如修改数据库、发送拒收邮件、出具最终蓝图）前，系统将自动挂起（Interrupt），等待人类主管点击审批或修改上下文后方可继续。
+涵盖实体：战机、军舰、潜艇、武器、雷达、消耗品（诱饵/声呐）、航空设施等。
 
-⚕️ 自愈与重试防线 (Self-Correction)：内置 format_validator_edge，当模型输出格式错误或产生幻觉时，系统将携带错误日志（error_log）强制模型反思重写，并受最大重试次数（retry_count）严格保护，防止死循环。
+深度穿透逻辑：运用 SQL JOIN 将“战术挂载方案 (Loadout)”与“弹药库 (Magazine)”的真实携弹量/备弹数提取为连线属性，支持微观算力推演。
 
-📂 组织架构设计 (Architecture)
-系统采用经典的**“星型网络 + 局部流水线”**的拓扑结构：
+🧠 LangGraph 智能路由与反思：
 
-Plaintext
-[用户输入] 
-   │
-   ▼
-[ 🧠 Router 总调度台 ] ──(意图识别)──┐
-   │                               │
-   ├─▶ [ 🟢 SAP 实施部 ] ──────────┼─▶ (撰写 BBP 蓝图 / 查询采购类别) ──▶ [⏸️ 需人工审批] ──▶ 🏁 结束
-   │                               │
-   ├─▶ [ 🔵 PCB 风控部 ] ──────────┼─▶ (评估供应商产能 / 抓取底层报价) ──▶ [⏸️ 需人工审批] ──▶ 🏁 结束
-   │                               │
-   ├─▶ [ ⚪ 前台客服部 ] ──────────┼─▶ (闲聊兜底) ──▶ 🏁 结束
-   │                               │
-   └─▶ [ 🔴 军工情报部 ] ──────────┘
-             │  ▲
-             │  │ (循环防呆与修正)
-             ▼  │
-       [ 🔧 Action (MCP工具库) ] ──▶ (跨界读取物理机密文件) ──▶ [⏸️ 需人工审批]
-📁 核心文件说明 (Project Structure)
-graph.py: 系统的骨架定义，负责组装所有节点、画出路由条件边，并配置 Checkpointer 记忆体和人工审批断点。
+构建了包含 military、sap、pcb 多业务线的前台总调度 (Supervisor) 路由节点。
 
-nodes.py: 系统的肌肉，包含所有虚拟部门的具体业务逻辑（weapon_expert_node, sap_expert_node, pcb_expert_node）以及纯文本路由引擎 router_edge。
+具备 自我纠错能力 (Self-Correction)：当生成的图查询语句 (nGQL) 报错时，智能体会读取报错日志并自动重试。
 
-state.py: 系统的血液，定义了全局共享的状态数据结构（AgentState），解决循环导入问题。
+🔌 MCP 标准化探针接入：通过 Model Context Protocol 将图数据库查询能力 (NebulaGraphTool) 封装为标准服务，实现 LLM 与图谱的“神经接驳”。
 
-mcp_military_server.py: 独立的 MCP 微服务，封装了 list_weapon_files 和 read_weapon_spec 等与本地文件系统交互的危险操作。
+🏗️ 系统架构与核心文件
+import_cmo_to_nebula.py：图谱创世引擎（数据注射泵）。负责自动解析 PlantUML 法则、建立 NebulaGraph Schema、执行数据清洗（防 f-string/换行符崩溃）并泵入千万级微观数据。
 
-config.py: 核心配置文件，用于统一管理大模型配置（Base URL, Model Name）和环境变量。
+nebula_tool.py：图数据库数据探针。安全解析图谱原生数据结构并转化为 JSON，内置全景报错雷达。
 
-🚀 快速启动 (Getting Started)
-1. 环境准备
-确保你的机器上已安装 Python 3.10+，并推荐使用 uv 进行极速环境管理。
+mcp_military_server.py：MCP 服务端。将图数据库探针包装为大模型可调用的标准 Tool。
+
+nodes.py & graph.py & state.py：LangGraph 智能体核心逻辑。包含前台意图识别路由、图谱法则 (Schema) 的系统提示词注入、以及 Text2nGQL 的转换与提取。
+
+schema.py：基于 Pydantic 的大模型动态输出结构化约束。
+
+🚀 快速启动
+1. 基础设施准备
+确保已安装并启动 NebulaGraph (默认 127.0.0.1:9669)。
+
+确保已安装并启动本地大模型服务 (如 Ollama + Qwen3.5)。
+
+2. 构建军工图谱宇宙
+确保 DB3K_512.db3 和 Capabilities.plantuml 在项目根目录，然后执行数据注射：
 
 Bash
-# 克隆仓库
-git clone https://github.com/你的用户名/ai_test.git
-cd ai_test
+python import_cmo_to_nebula.py
+(系统将自动创建 military_space_v6 空间并建立全部节点、边与倒排索引)
 
-# 配置你的 API Key (请勿将真实 Key 提交至 Git！)
-# 建议在本地新建 .env 文件并填入：
-# OPENAI_API_KEY="sk-xxxxxxx"
-2. 启动服务 (LangGraph Studio)
-本项目已完美适配 LangGraph Studio。直接运行开发脚本，它会自动拉起所有依赖并开启本地可视化调试界面。
+3. 启动 MCP 服务与 Agent
+MCP 服务端与 LangGraph 客户端已配置为联合指挥中心，直接运行入口程序即可发起自然语言问询：
 
 Bash
-chmod +x dev.sh
-./dev.sh
-3. 测试用例 (Test Cases)
-在 Studio 的界面中开启 New Thread，尝试输入以下指令，观察任务如何在不同部门间流转：
+# 示例提问："帮我查一下 F-22A Raptor 战斗机能挂载什么武器？请列出它的挂载方案、武器名称及对应的最大携弹量。"
+🎯 战术查询示例 (Text2nGQL)
+得益于图谱的深度建模，AI Agent 目前可以直接推理并生成如下高阶 nGQL：
 
-测试军工与 MCP："去机密档案库里看看，现在都有哪些武器的说明书文件？"
+Cypher
+# 查询 F-22A 的挂载网络及具体携弹量 (MaxLoad)
+MATCH (a:Aircraft)-[:aircraft_can_equip]->(l:Loadout)-[e:loadout_contains]->(w:Weapon) 
+WHERE a.Aircraft.Name CONTAINS "F-22" 
+RETURN l.Loadout.Name, w.Weapon.Name, e.MaxLoad LIMIT 20;
+📈 未来战略路线
+[ ] 接入动态运动学数据 (Kinetics) 以支持飞行包线计算。
 
-测试 SAP 与断点："我们今天来写一下关于采购类别的标准流程 BBP"
+[ ] 开发战术可视化 UI 面板 (Streamlit / Gradio)。
 
-测试 PCB 业务："有一批中小企业分包的板子，帮我查查供应商资质"
-
-测试闲聊兜底："你好，你是谁？"
-
-🔮 未来演进路线 (Roadmap)
-[ ] 第四阶段: 通过 Docker 部署 NebulaGraph，替换现有的本地 txt 文件读取。
-
-[ ] 第五阶段: 编写 mcp_nebulagraph_server.py，赋予 Agent 图谱深度推理（GraphRAG）能力。
-
-[ ] 第六阶段: 接入真实的 ERP 接口，让 SAP 与 PCB 节点拥有真正的物理执行能力。
-
-Developed by 濮阳科技指挥官
+[ ] 激活多轮战术推演的短期与长期记忆 (Memory Context)。
